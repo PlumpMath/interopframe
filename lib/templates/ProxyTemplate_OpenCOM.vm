@@ -1,0 +1,38 @@
+package ${packageName};
+
+#if(${bindingImports})
+${bindingImports}
+#end
+
+import ${packageName}.${interfaceName};
+import ${packageNameISkeleton}.ISkeleton${className};
+import OpenCOM.ILifeCycle;
+import OpenCOM.IMetaInterface;
+import OpenCOM.IUnknown;
+import OpenCOM.OpenCOMComponent;
+
+public class Proxy${className} extends OpenCOMComponent implements ${interfaceName}, IUnknown, ILifeCycle, IMetaInterface {
+	
+	ISkeleton${className} stub;
+
+	public Proxy${className}(IUnknown binder) {
+		super(binder);
+		startStub();
+	}	
+        
+	public boolean startup(Object data) {
+		return true;
+	}
+	
+	public boolean shutdown() {
+		return true;
+	}
+	
+#foreach (${method} in ${methods})
+${method}
+#end	
+#if(${startStub})
+${startStub}
+#end
+	
+}

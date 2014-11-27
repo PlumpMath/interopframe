@@ -1,0 +1,10 @@
+package ${packageName};
+
+import java.rmi.Remote;
+import java.rmi.RemoteException;
+
+public interface ISkeleton${className} extends Remote {
+#foreach (${method} in ${methods})
+	${method};
+#end	
+}

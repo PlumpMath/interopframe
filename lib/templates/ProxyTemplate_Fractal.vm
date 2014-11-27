@@ -1,0 +1,26 @@
+package ${packageName};
+
+#if(${bindingImports})
+${bindingImports}
+#end
+
+import ${packageName}.${interfaceName};
+import ${packageNameISkeleton}.ISkeleton${className};
+
+public class Proxy${className} implements ${interfaceName} {
+	
+	ISkeleton${className} stub;
+	
+	public Proxy${className}() {
+		System.err.println("PROXY ${className} SERVER CRIADO");
+		startStub();
+	}	
+	
+#foreach (${method} in ${methods})
+${method}
+#end	
+#if(${startStub})
+${startStub}
+#end
+	
+}

@@ -1,0 +1,59 @@
+package ${packageName};
+
+#if(${bindingImports})
+${bindingImports}
+#end
+
+import ${packageName}.ISkeleton${className};
+import ${packageName}.${interfaceName};
+import OpenCOM.IConnections;
+import OpenCOM.ILifeCycle;
+import OpenCOM.IMetaInterface;
+import OpenCOM.IUnknown;
+import OpenCOM.OCM_SingleReceptacle;
+import OpenCOM.OpenCOMComponent;
+
+#if(${bindingAnnotations})
+${bindingAnnotations}
+#end
+public class Skeleton${className} extends OpenCOMComponent implements ISkeleton${className}, IUnknown, ILifeCycle, IMetaInterface, IConnections {
+
+	public OCM_SingleReceptacle<${interfaceName}> rc${className};
+	
+	public Skeleton${className}(IUnknown binder) {
+		super(binder);		
+		this.rc${className} = new OCM_SingleReceptacle<${interfaceName}>(${interfaceName}.class);	
+		registerObject();
+	}	
+	
+	public boolean connect(IUnknown compToConnect, String riid, long provConnID) {
+		if (riid.equals("${packageName}.${interfaceName}")) {
+			return this.rc${className}.connectToRecp(compToConnect, riid, provConnID);
+		}
+		return false;
+	}
+
+	public boolean disconnect(String riid, long connID) {
+		if (riid.equals("${packageName}.${interfaceName}")) {
+			return this.rc${className}.disconnectFromRecp(connID);
+		} 
+		return false;
+	}
+	
+	public boolean startup(Object data) {
+		return true;
+	}
+	
+	public boolean shutdown() {
+		return true;
+	}
+	
+#foreach(${method} in ${methods})
+	${method}
+#end
+
+#if(${registerObject})
+${registerObject}
+#end
+	
+}

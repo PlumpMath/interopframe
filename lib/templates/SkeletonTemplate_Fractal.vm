@@ -1,0 +1,60 @@
+package ${packageName};
+
+#if(${bindingImports})
+${bindingImports}
+#end
+
+import ${packageName}.ISkeleton${className};
+import ${packageName}.${interfaceName};
+import org.objectweb.fractal.api.NoSuchInterfaceException;
+import org.objectweb.fractal.api.control.BindingController;
+import org.objectweb.fractal.api.control.IllegalBindingException;
+import org.objectweb.fractal.api.control.IllegalLifeCycleException;
+
+#if(${bindingAnnotations})
+${bindingAnnotations}
+#end
+public class Skeleton${className} implements ISkeleton${className}, java.lang.Runnable, BindingController {
+	
+	public ${interfaceName} i${className};		
+	
+	public Skeleton${className}() {
+		System.err.println("SKELETON ${className} CLIENT CRIADO");		
+	}
+	
+	public String[] listFc() {
+		return new String[] { "${className}" };
+	}
+
+	public Object lookupFc(String clientItfName) throws NoSuchInterfaceException {
+		if (clientItfName.equals("${className}")) {
+			return i${className};
+		}
+		return null;
+	}
+
+	public void bindFc(String clientItfName, Object serverItf) throws NoSuchInterfaceException, IllegalBindingException, IllegalLifeCycleException {
+		if (clientItfName.equals("${className}")) {
+			i${className} = (${interfaceName})serverItf;
+		}		
+	}
+
+	public void unbindFc(String clientItfName) throws NoSuchInterfaceException, IllegalBindingException, IllegalLifeCycleException {
+		if (clientItfName.equals("${className}")) {
+			i${className} = null;
+		}		
+	}
+	
+#foreach(${method} in ${methods})
+	${method}
+#end
+	
+#if(${registerObject})
+${registerObject}
+#end
+	
+	public void run() {		
+		registerObject();
+	}
+
+}
